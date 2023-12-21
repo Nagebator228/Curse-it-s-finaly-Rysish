@@ -1,0 +1,80 @@
+#include <iostream>   
+#include <fstream>   
+#include <string> 
+#include <windows.h> 
+ 
+using namespace std; 
+ 
+int main() 
+{ 
+    SetConsoleCP(1251); 
+    SetConsoleOutputCP(1251); 
+    int k; 
+    string alf_ru = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"; 
+    string alf_en = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; 
+    string buf; 
+    string decod; 
+    string alf; 
+    cout << "\nПрограмма шифрования кодом Цезаря" << endl; 
+    cout << "\nВыберите язык: " << endl; 
+    cout << "1. Руский" << endl; 
+    cout << "2. Английский" << endl; 
+    int lang; 
+    cin >> lang; 
+    switch (lang) { 
+    case 1: 
+        alf = alf_ru; 
+        break; 
+    case 2: 
+        alf = alf_en; 
+        break; 
+    default: 
+        cout << "Неправильный выбор языка" << endl; 
+        return 0; 
+    } 
+    cout << "\nШифрование" << endl; 
+    cout << "Введите слово: "; 
+    cin.ignore(); 
+    getline(cin, buf); 
+    cout << "Введите цифровой ключ, (шаг от 1 до 10): "; 
+    cin >> k; 
+    for (int i = 0; i < buf.length(); i++) { 
+        for (int j = 0; j < alf.length(); j++) { 
+            if (buf[i] == alf[j]) { 
+                buf[i] = alf[(j + k) % alf.length()]; 
+                break; 
+            } 
+        } 
+    } 
+ 
+    cout << "Ваш шифр: " << buf << endl; 
+    cout << "\n--Дешифровка---" << endl; 
+    cout << "Введите ваш шифр: "; 
+    cin.ignore(); 
+    getline(cin, decod); 
+    cout << "Введите цифровой ключ, (шаг от 1 до 10): "; 
+    cin >> k; 
+ 
+    for (int i = 0; i < decod.length(); i++) { 
+        for (int j = 0; j < alf.length(); j++) { 
+            if (decod[i] == alf[j]) { 
+                decod[i] = alf[(j - k + alf.length()) % alf.length()]; 
+                break; 
+            } 
+        } 
+    } 
+ 
+    cout << "Шифр: " << decod << endl; 
+    ofstream file("Zapiska.txt"); 
+    if (file.is_open()) { 
+        file << "Ваш шифр: " << buf << endl; 
+        file << "Шифр: " << decod << endl; 
+        file.close(); 
+        cout << "Данные записаны в файл Zapiska.txt" << endl; 
+    } 
+    else { 
+        cout << "Не удалось открыть файл" << endl; 
+    } 
+ 
+    return 0; 
+}
